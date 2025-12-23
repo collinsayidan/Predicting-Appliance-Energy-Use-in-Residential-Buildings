@@ -1,28 +1,105 @@
 # Predicting Appliance Energy Use in Residential Buildings
+A Machine Learning Approach to Residential Energy Forecasting
+Author: Collins Ayidan
+Program: MSc Mathematics & Data Science, University of Stirling
 
-A Machine Learning Project by Collins Ayidan
--
-This repository contains my MSc research project from the University of Stirling, focused on predicting appliance energy consumption using advanced feature engineering, visualization, and machine learning models.
-The study uses the UCI Appliance Energy Prediction Dataset and evaluates multiple models to determine the best predictors of energy use in a residential setting.
+## Overview
+This project applies machine learning techniques to predict appliance energy consumption in residential buildings using the widely‑studied UCI Appliance Energy Prediction Dataset.
+It explores feature engineering, evaluates eight machine learning models, and identifies the most effective model based on RMSE, MAE, R², and MAPE.
+This work was originally completed as my Research Project for the MSc program and has been refined for open‑source publication.
 
-# Project Overview
-Residential energy consumption is a critical component of global energy use. By understanding and predicting appliance energy demand, we can support:
+## Objectives
 
-Smarter home‑energy management
-Improved energy efficiency
-Better resource planning
+- Build and compare multiple machine‑learning models for energy‑use prediction.
+- Engineer temporal, seasonal, and environmental features for performance improvement.
+- Optimize hyperparameters using HalvingRandomSearchCV.
+- Identify the best‑performing algorithm and key drivers of energy consumption.
 
-This project develops and compares eight machine‑learning models, optimized using HalvingRandomSearchCV, and enhanced through extensive feature engineering and exploratory data analysis (EDA).
+## Dataset
+### Source: UCI Machine Learning Repository — Appliance Energy Prediction Dataset
+The dataset includes:
+- Indoor and outdoor temperature & humidity
+- Weather conditions (windspeed, pressure, Tdewpoint, etc.)
+- Timestamp (date, time)
+- Appliance energy consumption readings (target variable)
 
-# Repository Structure
+## Methods & Techniques
+1. Data Preprocessing
+- Date formatting
+- Handling missing values
+- Standardization (for models requiring scaling)
 
+2. Feature Engineering
+Engineered features include:
+- NSM (Number of Seconds from Midnight)
+- Weekday/Weekend classification
+- Day of Week (categorical)
+- Hour, Month, Day
+- Season (Winter/Spring/Summer/Autumn)
+ 
+Cyclical encoding for Hour:
+Hour_sin = sin(2π * Hour / 24)
+Hour_cos = cos(2π * Hour / 24)
+
+3. Models Evaluated
+- Linear Regression
+- Support Vector Regression (SVR)
+- Decision Tree Regressor
+- Random Forest Regressor
+- Extra Trees Regressor
+- Gradient Boosting Regressor
+- XGBoost Regressor
+- Neural Network (MLPRegressor)
+  
+4. Hyperparameter Tuning
+Successive Halving via HalvingRandomSearchCV
+
+5. Evaluation Metrics
+- RMSE (Root Mean Square Error)
+- MAE (Mean Absolute Error)
+- R² Score
+- MAPE (Mean Absolute Percentage Error)
+
+## Key Results
+Top Performing Models
+
+| Model         | RMSE  | R²   | Notes          |
+|---------------|-------|------|----------------|
+| Extra Trees   | 63.28 | 0.60 | Best performer |
+| Random Forest | 65.51 | 0.57 | Strong, stable |
+| XGBoost       | 64.36 | 0.57 | Competitive    |
+
+## Underperforming Models
+- Decision Tree
+- Linear Regression
+
+## Feature Importance (Extra Trees)
+Most influential predictors:
+- NSM (time of day)
+- Hour of the day
+- Environmental conditions (temperature, humidity)
+
+## Least influential:
+- Season
+- WeekStatus
+
+## Conclusion
+- Extra Trees Regressor delivered the best predictive performance.
+- Time‑based features (NSM, Hour) were highly influential, demonstrating strong temporal patterns in appliance energy use.
+- Environmental data also played a major role.
+
+## Future Work
+
+- Improve performance of SVR and Neural Networks
+- Integrate socio‑demographic and behavioural data
+- Incorporate real‑time sensor streams for smart‑home applications
+- Explore deep learning (LSTM, Temporal CNN)
+
+# Repo Structure
 ## Energy-prediction
 
 ## data
-- energydata.csv
-
-## notebooks
-- analysis.ipynb
+- energydata_complete.csv
 
 ## src
 - preprocessing.py
@@ -40,91 +117,12 @@ This project develops and compares eight machine‑learning models, optimized us
 - heatmap_week3.png
 - model_results.csv
 
-## models
-- best_model.pk1
-- README.md
+## notebooks
+- analysis.ipynb
 
 ## Project Root
 - README.md
 - requirements.txt
-## docs
-- overview
-- methodology
-- results
-- README.md
-
- # Methodology
-- Data Preprocessing
-
-Parsing and formatting timestamps
-Cleaning and selecting relevant variables
-Converting categorical values
-Dropping irrelevant or redundant features
-
-- Feature Engineering
-Engineered variables include:
-FeatureDescriptionNSMNumber of seconds from midnightWeekStatusWeekend vs WeekdayDay_of_weekMonday–SundaySeasonBased on monthHour_sin, Hour_cosCyclical encoding for 24‑hour periodicityMonth, Day, HourExtracted from timestamp
-These were shown to improve predictive power significantly.
-
- ## Exploratory Data Analysis (EDA)
-The notebook generates:
-✔ Pair Plots (4 subsets)
-Visualizing relationships between temperature, humidity, and environmental variables.
-✔ Time‑Series Trends
-
-## Full consumption profile
-One‑week zoomed‑in view
-✔ Histogram & Boxplot
-Distribution and outlier detection for the target variable (Appliances).
-✔ Weekly Heatmap
-Hourly consumption (0–23h) across days of the week, for Week 3 of the dataset.
-These graphics help uncover patterns in user behaviour and environmental influences.
-
-## Models Implemented
-### Eight models were evaluated:
-
-Linear Regression |
-Support Vector Regression (SVR) |
-Decision Tree Regressor |
-Random Forest Regressor |
-Extra Trees Regressor |
-Gradient Boosting Regressor |
-XGBoost Regressor |
-Neural Network (MLPRegressor)
-
-## Hyperparameter Tuning
-HalvingRandomSearchCV used for efficient optimization
-
-## Evaluation Metrics
-RMSE
-MAE
-R² Score
-MAPE
-
-## Key Findings
-Top Performing Models:
-ModelRMSER²Extra Trees63.280.60Random Forest65.510.57XGBoost64.360.57
-
-##Underperforming
-Linear Regression
-Decision Tree
-
-## Feature Importance
-Highly influential:
-NSM (time of day)
-Hour
-Temperature & humidity sensors
-
-## Low influence:
-Season
-WeekStatus
-
-### Future Work
-Improve deep learning approaches (LSTM/CNN for time series)
-Add socio‑demographic variables
-Integrate real‑time IoT sensor feeds
-Deploy prediction model via API or dashboard
-
 
 ## Acknowledgements
 University of Stirling – MSc Mathematics & Data Science program |
